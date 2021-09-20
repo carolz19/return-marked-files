@@ -2,35 +2,42 @@ from canvasapi import Canvas
 import yaml
 from pathlib import Path
 import os
+import sys
 
 """
 Submission file names will have the form: 
 firstnamelastname_studentid_submissionid_assignmentname.____
 """
 
-def parse_file_name(f):
-    return "lol"
-
-
+'''Dictionary with key as student id and corresponding submission 
+file path as value '''
 def create_marked_files_dict(path) :
     content = os.listdir(path)
     marked_files = {}
 
     for f in content:
-        print(f)
         file_path = os.path.join(path, f)
         
         if os.path.isfile(file_path):
-            stu_id = parse_file_name(f)
+            stu_id = f.split('_')[1]
             marked_files[stu_id] = file_path
 
+    return marked_files
 
-def main(assignment_id):
-    '''Initialize dictionaries'''
-    marked_files = create_marked_files_dict("./marked_files/")
-    # submissions = create_submissions_dict()
+'''Dictionary with key as student id and corresponding canvas submission as value '''
+def create_submissions_dict(canvas, course_id, assignment_id):
+    submissions_dict = {}
+    submissions = get_submissions(canvas, course_id, assignment_id)
+    for submission in submissions:
+        stu_id = str(submission).split('-')[1]
+        submission_id = submission
+        submissions_dict[stu_id] = submission_id
 
-    '''Connect to Canvas'''
+    return submissions_dict
+
+
+'''Connect to Canvas'''
+def connect_to_canvas():
     path_to_token = Path(".").resolve()
     file = open(path_to_token / "token.yaml")
     token = yaml.load(file, Loader=yaml.FullLoader)
@@ -39,13 +46,29 @@ def main(assignment_id):
     API_KEY = token
 
     canvas = Canvas(API_URL, API_KEY)
-    
-    '''Get submissions'''
-    course = canvas.get_course(51824)
+    return canvas
+
+
+'''Get submissions'''
+def get_submissions(canvas, course_id, assignment_id):
+    course = canvas.get_course(course_id)
     assignment = course.get_assignment(assignment_id)
     submissions = assignment.get_submissions()
-    for submission in submissions: print(submission)
+    return submissions
+
 
 if __name__=="__main__":
+    '''Specify course and assignment id'''
+    course_id = 51824
     assignment_id = 1047215
-    main(assignment_id)
+    path_to_files = "./marked_files/"
+
+    canvas = connect_to_canvas()
+
+    '''Initialize dictionaries'''
+    marked_files_dict = create_marked_files_dict(path_to_files)
+    submission_dict = create_submissions_dict(canvas, course_id, assignment_id)
+
+    for stu_id in marked_files_dict:
+        if stu_id in submission_dict:
+            submission_dict[stu_id].upload_comment(marked_files_dict[stu_id])
