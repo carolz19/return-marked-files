@@ -1,4 +1,5 @@
-# return-marked-files
+# Return Marked Files
+This python script uploads each file in the `marked-files/` folder as a comment on the corresponding student submission on an assignment on Canvas.
 
 ## Setup:
 1. The `marked-files/` folder will contain files that will be uploaded to corresponding student submissions as comments.
