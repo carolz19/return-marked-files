@@ -1,0 +1,11 @@
+name: marked_files
+channels:
+  - eoas_ubc
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip=21
+  - pip:
+    - canvasapi
+    - pyyaml
+    - pathlib
