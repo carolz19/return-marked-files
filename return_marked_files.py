@@ -59,8 +59,13 @@ def get_submissions(canvas, course_id, assignment_id):
 
 if __name__=="__main__":
     '''Specify course and assignment id'''
-    course_id = 51824
-    assignment_id = 1047215
+    course_id = ''
+    assignment_id = ''
+    try:
+        course_id = str(sys.argv[1])
+        assignment_id = str(sys.argv[2])
+    except:
+        print('ERROR: Must input course ID and assignment ID.')
     path_to_files = "./marked_files/"
 
     canvas = connect_to_canvas() 
