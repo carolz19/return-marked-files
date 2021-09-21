@@ -63,7 +63,7 @@ if __name__=="__main__":
     assignment_id = 1047215
     path_to_files = "./marked_files/"
 
-    canvas = connect_to_canvas()
+    canvas = connect_to_canvas() 
 
     '''Initialize dictionaries'''
     marked_files_dict = create_marked_files_dict(path_to_files)
