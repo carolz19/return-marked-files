@@ -9,7 +9,7 @@ Submission file names will have the form:
 firstnamelastname_studentid_submissionid_assignmentname.____
 """
 
-'''Dictionary with key as student id and corresponding submission 
+'''Return dictionary with key as student id and corresponding submission 
 file path as value '''
 def create_marked_files_dict(path) :
     content = os.listdir(path)
@@ -24,7 +24,7 @@ def create_marked_files_dict(path) :
 
     return marked_files
 
-'''Dictionary with key as student id and corresponding canvas submission as value '''
+'''Return dictionary with key as student id and corresponding canvas submission as value '''
 def create_submissions_dict(canvas, course_id, assignment_id):
     submissions_dict = {}
     submissions = get_submissions(canvas, course_id, assignment_id)
@@ -49,14 +49,14 @@ def connect_to_canvas():
     return canvas
 
 
-'''Get submissions'''
+'''Get submissions for assignment'''
 def get_submissions(canvas, course_id, assignment_id):
     course = canvas.get_course(course_id)
     assignment = course.get_assignment(assignment_id)
     submissions = assignment.get_submissions()
     return submissions
 
-
+'''Driver program to upload files as comments to Canvas'''
 if __name__=="__main__":
     '''Specify course and assignment id'''
     course_id = ''
